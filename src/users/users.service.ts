@@ -16,8 +16,22 @@ export class UsersService {
     return await createdUser.save();
   }
 
-  async findAll(): Promise<Users[]> {
-    return await this.usersModel.find().exec();
+  async findAll(
+    keyword: string,
+  ): Promise<{ totalResult: number; results: Users[] }> {
+    if (typeof keyword !== 'string') {
+      return { totalResult: 0, results: [] };
+    }
+    const query = {
+      $or: [
+        { name: { $regex: keyword, $options: 'i' } },
+        { email: { $regex: keyword, $options: 'i' } },
+      ],
+    };
+    const results = await this.usersModel.find({ $and: [query] }).exec();
+    const totalResult = results.length;
+
+    return { totalResult, results };
   }
 
   async findOne(id: string) {
