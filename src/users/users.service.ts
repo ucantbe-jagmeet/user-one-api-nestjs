@@ -43,9 +43,7 @@ export class UsersService {
   }
 
   async totalUsers(): Promise<{ totalResult: number }> {
-    const results = await this.usersModel.find().exec();
-    const totalResult = results.length;
-
+    const totalResult = await this.usersModel.countDocuments().exec();
     return { totalResult };
   }
 
