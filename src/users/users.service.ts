@@ -18,6 +18,8 @@ export class UsersService {
 
   async findAll(
     keyword: string,
+    page: number,
+    limit: number,
   ): Promise<{ totalResult: number; results: Users[] }> {
     if (typeof keyword !== 'string') {
       return { totalResult: 0, results: [] };
@@ -28,10 +30,23 @@ export class UsersService {
         { email: { $regex: keyword, $options: 'i' } },
       ],
     };
-    const results = await this.usersModel.find({ $and: [query] }).exec();
+    const skip = (page - 1) * limit;
+
+    const results = await this.usersModel
+      .find({ $and: [query] })
+      .skip(skip)
+      .limit(limit)
+      .exec();
     const totalResult = results.length;
 
     return { totalResult, results };
+  }
+
+  async totalUsers(): Promise<{ totalResult: number }> {
+    const results = await this.usersModel.find().exec();
+    const totalResult = results.length;
+
+    return { totalResult };
   }
 
   async findOne(id: string) {

@@ -23,8 +23,16 @@ export class UsersController {
   }
 
   @Get()
-  findAll(@Query('keyword') keyword: string) {
-    return this.usersService.findAll(keyword);
+  findAll(
+    @Query('keyword') keyword: string,
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ) {
+    return this.usersService.findAll(keyword, page, limit);
+  }
+  @Get('/totalUsers')
+  totalUsers() {
+    return this.usersService.totalUsers();
   }
 
   @Get(':id')
