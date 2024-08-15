@@ -58,6 +58,6 @@ export class UsersService {
   }
 
   async remove(id: string) {
-    return await this.usersModel.findByIdAndRemove(id).exec();
+    return await this.usersModel.findByIdAndDelete(id).exec();
   }
 }
