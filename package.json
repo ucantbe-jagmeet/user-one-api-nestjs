@@ -6,6 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "prebuild": "yarn global add @nestjs/cli",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
@@ -73,6 +74,6 @@
     "testEnvironment": "node"
   },
   "engines": {
-  "node": ">=14.20.1"
+  "node": ">=18.x.x"
 }
 }
