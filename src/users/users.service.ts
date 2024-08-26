@@ -34,6 +34,7 @@ export class UsersService {
 
     const results = await this.usersModel
       .find({ $and: [query] })
+      .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
       .exec();
