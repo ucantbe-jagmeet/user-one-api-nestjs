@@ -20,31 +20,59 @@ export class UsersService {
     keyword: string,
     page: number,
     limit: number,
+    gender?: string,
+    status?: string,
   ): Promise<{ totalResult: number; results: Users[] }> {
-    if (typeof keyword !== 'string') {
-      return { totalResult: 0, results: [] };
-    }
-    const query = {
+    const query: any = {
       $or: [
         { name: { $regex: keyword, $options: 'i' } },
         { email: { $regex: keyword, $options: 'i' } },
       ],
     };
+
+    if (gender && gender !== '') {
+      query.gender = gender;
+    }
+
+    if (status && status !== '') {
+      query.status = status;
+    }
+
     const skip = (page - 1) * limit;
 
     const results = await this.usersModel
-      .find({ $and: [query] })
+      .find(query)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
       .exec();
-    const totalResult = results.length;
+
+    const totalResult = await this.usersModel.countDocuments(query).exec();
 
     return { totalResult, results };
   }
 
-  async totalUsers(): Promise<{ totalResult: number }> {
-    const totalResult = await this.usersModel.countDocuments().exec();
+  async totalUsers(
+    keyword: string,
+    gender?: string,
+    status?: string,
+  ): Promise<{ totalResult: number }> {
+    const query: any = {
+      $or: [
+        { name: { $regex: keyword, $options: 'i' } },
+        { email: { $regex: keyword, $options: 'i' } },
+      ],
+    };
+
+    if (gender && gender !== '') {
+      query.gender = gender;
+    }
+
+    if (status && status !== '') {
+      query.status = status;
+    }
+
+    const totalResult = await this.usersModel.countDocuments(query).exec();
     return { totalResult };
   }
 

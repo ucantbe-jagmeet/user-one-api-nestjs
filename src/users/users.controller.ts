@@ -27,12 +27,18 @@ export class UsersController {
     @Query('keyword') keyword: string,
     @Query('page') page: number,
     @Query('limit') limit: number,
+    @Query('gender') gender: string,
+    @Query('status') status: string,
   ) {
-    return this.usersService.findAll(keyword, page, limit);
+    return this.usersService.findAll(keyword, page, limit, gender, status);
   }
   @Get('/totalUsers')
-  totalUsers() {
-    return this.usersService.totalUsers();
+  totalUsers(
+    @Query('keyword') keyword: string,
+    @Query('gender') gender: string,
+    @Query('status') status: string,
+  ) {
+    return this.usersService.totalUsers(keyword, gender, status);
   }
 
   @Get(':id')
