@@ -6,7 +6,11 @@ dotenv.config();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.enableCors();
+  app.enableCors({
+    origin: ['https://user-one-phi.vercel.app/', 'http://localhost:3000'], // Add your allowed URLs here
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Specify the allowed HTTP methods
+    credentials: true, // Include credentials like cookies in CORS requests
+  });
 
   const port = process.env.PORT || 3333;
 
